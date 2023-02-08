@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_extras.mention import mention
 
 st.set_page_config(
     page_title="⛽︎ Fuel consumption",
@@ -8,17 +9,22 @@ st.set_page_config(
 )
 
 st.title('⛽︎ Fuel consumption')
-st.markdown("""
-Author : Mathis Derenne (https://github.com/mathisdrn)
 
----
-""")
+mention(
+    label="Mathis Derenne",
+    icon="github",  # GitHub is also featured!
+    url="https://github.com/mathisdrn",
+)
+
 st.header('Project description')
 st.markdown("""
 This project aims at providing a deeper understanding of how caractheristic of a car impact fuel consumption.
 
 ### Components :
 - dashboard : display main metrics and charts
+- vehicle finder : find a car based on its characteristics
+
+Coming soon :
 - model training : train a model to predict the fuel consumption of a car based on existing pool of cars
 - prediction : predict the fuel consumption of a car based on its characteristics
 
