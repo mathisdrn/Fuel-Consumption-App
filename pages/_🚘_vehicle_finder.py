@@ -42,22 +42,22 @@ df = df.rename(columns={'YEAR': 'Release year', 'GEARS' : 'Gears', 'VEHICLE CLAS
 df['Release year'] = df['Release year'].dt.year
 # reorder column
 df = df[['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears', 'Engine size (L)', 'Cylinders', 'CO2 emissions (g/km)', 'Mixed consumption (L/100 km)', 'City (L/100 km)', 'Highway (L/100 km)']]
+filter = df.copy()
 
 col1, col2 = st.columns(2)
 with col1:
     make = selectbox('Make', df['Make'].unique())
-with col2:
-    model = selectbox('Model', df[df['Make'] == make]['Model'].unique())
-
-col_manually_filter = df[['Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears', 'Engine size (L)', 'Cylinders', 'CO2 emissions (g/km)', 'Mixed consumption (L/100 km)', 'City (L/100 km)', 'Highway (L/100 km)']]
-index_col_manually_filter = dataframe_explorer(col_manually_filter).index
-
-filter = df.copy()
-
 if make:
     filter = filter[df['Make'] == make] 
+
+with col2:
+    model = selectbox('Model', filter['Model'].unique())
 if model:
-    filter = filter[df['Model'] == model]
+    filter = filter[filter['Model'] == model]
+
+col_manually_filter = filter[['Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears', 'Engine size (L)', 'Cylinders', 'CO2 emissions (g/km)', 'Mixed consumption (L/100 km)', 'City (L/100 km)', 'Highway (L/100 km)']]
+index_col_manually_filter = dataframe_explorer(col_manually_filter).index
 
 filter = filter[filter.index.isin(index_col_manually_filter)].reset_index(drop = True)
+filter = filter.sort_values(by = ['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears'])
 st.dataframe(filter, use_container_width=True)
