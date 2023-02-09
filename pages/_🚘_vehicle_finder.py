@@ -53,9 +53,9 @@ if make:
     filter = filter[df['Make'] == make] 
 
 with col2:
-    # option from unique model sorted
-    option = filter['Model'].unique().tolist().sort()
-    model = selectbox('Model', option)
+    options = filter['Model'].unique()
+    options.sort()
+    model = selectbox('Model', options)
 if model:
     filter = filter[filter['Model'] == model]
 
