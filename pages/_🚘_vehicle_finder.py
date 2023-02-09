@@ -60,6 +60,7 @@ if model:
 col_manually_filter = filter[['Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears', 'Engine size (L)', 'Cylinders', 'CO2 emissions (g/km)', 'Mixed consumption (L/100 km)', 'City (L/100 km)', 'Highway (L/100 km)']]
 index_col_manually_filter = dataframe_explorer(col_manually_filter).index
 
-filter = filter[filter.index.isin(index_col_manually_filter)].reset_index(drop = True)
+filter = filter[filter.index.isin(index_col_manually_filter)]
 filter = filter.sort_values(by = ['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears'])
+filter = filter.reset_index(drop=True)
 st.dataframe(filter, use_container_width=True)
