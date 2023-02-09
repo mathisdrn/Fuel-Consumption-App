@@ -29,6 +29,8 @@ df['TRANSMISSION'] = df['TRANSMISSION'].replace({'A': 'Automatic', 'AM': 'Automa
 # Rename FUEL CONSUMPTION to CITY (L/100 km)
 df = df.drop(columns=['COMB (mpg)'], axis = 1)
 df = df.rename(columns={'FUEL CONSUMPTION': 'CITY (L/100 km)'})
+# Capitalize MAKE
+df['MAKE'] = df['MAKE'].str.capitalize()
 
 # Uniformize vehicle class
 df['VEHICLE CLASS'] = df['VEHICLE CLASS'].str.capitalize()
