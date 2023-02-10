@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import time
 
 st.set_page_config(
     page_title="🧮 Prediction model",
@@ -24,9 +25,7 @@ st.markdown("""
     Fuel type
 """)
             
-st.info("""Note : best model is already saved and ready to use. It's not useful to execute without any additional data.""", icon = 'ℹ️')
-st.warning("There are about 17 000 rows in the dataset. The training of RandomForestRegressor with 20 set of parameters that are cross validated 5 times takes 100 fittings of the 89 columns of the data to get result of training. Execution may take some times (≈ 5 minutes)", icon = '⚠️')
-
+st.info("""Note : best model is already saved and ready to use. It's not needed to execute without any additional data.""", icon = 'ℹ️')
 def load_data():
     df = pd.read_csv('data/fuel_consumption.csv', parse_dates=['YEAR'])
     # Change Type of fuel to name
@@ -63,6 +62,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from sklearn.linear_model import Lasso
+from sklearn.model_selection import GridSearchCV
 
 def create_pipeline(X):
     numerical = X.select_dtypes(include=['int64', 'float64']).columns.values.tolist()
@@ -76,34 +76,30 @@ def create_pipeline(X):
     
     pipeline = Pipeline(steps=[
         ('preprocessor', preprocessor),
-        ('lasso', Lasso())]
-        , memory = cachedir)
+        ('lasso', Lasso(max_iter = 3000))])
 
     return pipeline
 
-from sklearn.model_selection import GridSearchCV
-
-from tempfile import mkdtemp
-cachedir = mkdtemp()
-
 def execute_pipeline(pipeline, X, Y):
     param = {
-        'lasso__alpha': np.geomspace(0.00001, 5, 10),
+        'lasso__alpha': np.geomspace(0.00001, 1, 5),
     }
     
-    grid = GridSearchCV(pipeline, param_grid = param, cv=5, verbose=2, n_jobs=-1, scoring = 'r2', refit = True)
+    grid = GridSearchCV(pipeline, param_grid = param, cv=3, verbose=2, n_jobs=-1, scoring = 'r2', refit = True)
 
-    
+    # time
+    start = time.time()
     with st.spinner('This may take up to a minute...'):
         grid.fit(X, Y)
+    end = time.time()
+    st.success(f"""Fitting completed - Time elapsed : {round(end - start)} seconds.""", icon = '✅')
     return grid
 
 def result(grid):
-    st.success(f"""**Fitting completed :**""", icon = '✅')
     st.markdown(f"""
 Best parameter is {grid.best_params_}
 
-R2 score of **{round(grid.best_score_, 3)}**
+R2 score of **{round(grid.best_score_, 2)}**
 
 > Interpretation : the model is able to explain {round(grid.best_score_ * 100)}% of the variance in the data. 
 """)
@@ -113,8 +109,9 @@ import joblib
 def save_model(grid):
     best_model = grid.best_estimator_
     st.write('#### Saving model')
-    joblib.dump(best_model, 'prediction_model.pkl')
+    # joblib.dump(best_model, 'prediction_model.pkl')
     st.success('Best Model saved', icon = '✅')
+
 
 if st.button('Run the training of models'):
     st.markdown('### Loading data')
@@ -122,12 +119,20 @@ if st.button('Run the training of models'):
 
     st.markdown('### Building pipeline')
     pipeline = create_pipeline(X)
+    st.warning("""
+A complex pipeline with multiple regressors was previously implemented. A R2 Score of 85 % was achieved by RandomForestRegressor.
+However some constraint came with it :
+- fitting several models, in average 100 times, on 22 000 rows and 89 columns took a long time (> 30 minutes)
+- the size of the model was over 500 Mo and could no longer be loaded in 'your car consumption' .
+
+While Streamlit can certainly handle the training of complex models, the application and public destined for this project do no justify such implementation.
+This page rather intend to present a real time generic example of the process of training a model as well as a proof of concept that Streamlit can host complete data science project from displaying Dashboard, querying data from a server and retraining models within an appreciable UI.
+""", icon = '⚠️')
+
     st.info("""
-A complex pipeline with multiple regressors have been used. A r2 score of 85% was achieved by RandomForestRegressor.
-However some constraint came with it : 
-- long computation time (> 20 minutes)
-- the export of the model was over 500 Mo
-The notebooks for this model can be found in the repository but the version implemented here is using Lasso and is tuned by GridSearchCV over 10 parameters by 5 cross validation.
+The lighter version implemented here uses Lasso regressor and is tuned by GridSearchCV over 5 parameters by 3 cross validation (15 fits).
+
+The computationally intensive pipelines can be found in the repository of this Project.
 """)
 
     st.markdown('### Training model : Lasso')
