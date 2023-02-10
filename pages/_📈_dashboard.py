@@ -27,8 +27,6 @@ def perc(value, all_value):
 df = pd.read_csv('data/fuel_consumption.csv', parse_dates=['YEAR'])
 # Change Type of fuel to name
 df['FUEL'] = df['FUEL'].replace({'X': 'Regular gasoline', 'Z': 'Premium gasoline', 'D': 'Diesel', 'E': 'Ethanol (E85)', 'N': 'Natural Gas'})
-# Replace Model by full name
-df['MODEL'] = df['MODEL'].replace({'4WD/4X4': 'Four-wheel drive', 'AWD': 'All-wheel drive', 'CNG': 'Compressed natural gas', 'FFV': 'Flexible-fuel vehicle', 'NGV': 'Natural gas vehicle', '#': 'High output engine'})
 # Extract last caracter of transmission as number of gears
 # ie. 816 cars have continuous variable transmission and don't have a number of gears
 df['GEARS'] = df['TRANSMISSION'].str.extract(r'(\d+)$', expand=False)
