@@ -21,12 +21,10 @@ st.markdown("""
 This project aims at providing a deeper understanding of how caractheristic of a car impact fuel consumption.
 
 ### Components :
-- dashboard : display main metrics and charts
-- vehicle finder : find a car based on its characteristics
-
-Coming soon :
-- model training : train a model to predict the fuel consumption of a car based on existing pool of cars
-- prediction : predict the fuel consumption of a car based on its characteristics
+- **dashboard** : display main metrics and charts
+- **vehicle finder** : find a car based on its characteristics
+- **prediction model** : train a model to predict the fuel consumption of a car based on existing pool of cars
+- **your car consumption** : predict the fuel consumption of a car based on its characteristics
 
 ### About the data :
 

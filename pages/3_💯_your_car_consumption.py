@@ -94,7 +94,7 @@ if submitted:
     # st.write(df)
     # st.write(df.dtypes)
     # Load model
-    model = joblib.load('prediction_model.pkl')
+    model = joblib.load('prediction_model/prediction_model.pkl')
     # Predict
     st.header('🛢️ Your results !')
     result = model.predict(df).reshape(-1,)

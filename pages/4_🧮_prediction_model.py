@@ -12,20 +12,22 @@ st.set_page_config(
 
 st.title('🧮 Prediction model')
 st.markdown("""
+
 **Target :** Fuel consumption (Combined, City, Highway), CO2 emissions (g/km)
 
 **Features :**
 
-    Vehicle class
     Make
+    Vehicle class
+    Fuel type
     Release year
     Engine size (L)
     Cylinders
     Transmission
-    Fuel type
 """)
             
-st.info("""Note : best model is already saved and ready to use. It's not needed to execute without any additional data.""", icon = 'ℹ️')
+st.info("""Note : best model is already saved and ready to use. It's not needed to execute without any additional data but feel free to press the button !""", icon = 'ℹ️')
+
 def load_data():
     df = pd.read_csv('data/fuel_consumption.csv', parse_dates=['YEAR'])
     # Change Type of fuel to name
