@@ -1,7 +1,7 @@
-streamlit==1.32.2
-streamlit_extras==0.4.0
-validators==0.24.0
-altair==5.2.0
-pandas==2.2.1
-numpy==1.26.4
-scikit-learn==1.4.1
+streamlit>=1.32,<2.0
+streamlit_extras>=0.4, <1.0
+altair>=5.2,<6.0
+pandas>=2.2, <3.0
+numpy>=1.26, <2.0
+scikit-learn>=1.4.1.post1, <2.0
+validators
