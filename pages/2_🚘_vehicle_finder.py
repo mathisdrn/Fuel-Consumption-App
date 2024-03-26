@@ -64,4 +64,4 @@ index_col_manually_filter = dataframe_explorer(col_manually_filter).index
 filter = filter[filter.index.isin(index_col_manually_filter)]
 filter = filter.sort_values(by = ['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears'])
 filter = filter.reset_index(drop=True)
-st.dataframe(filter, use_container_width=True)
+st.dataframe(filter, use_container_width=True, hide_index=True)
