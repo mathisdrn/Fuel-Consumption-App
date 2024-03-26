@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_extras.mention import mention
+from streamlit_extras.mention import mention 
 
 st.set_page_config(
     page_title="⛽︎ Fuel consumption",
