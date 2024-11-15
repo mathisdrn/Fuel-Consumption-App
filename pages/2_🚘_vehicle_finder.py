@@ -2,11 +2,12 @@ import streamlit as st
 import pandas as pd
 from streamlit_extras.no_default_selectbox import selectbox
 from streamlit_extras.dataframe_explorer import dataframe_explorer
+from utils import load_data, display_columns_name_mapping
 
 st.set_page_config(
-    page_title="🚘 Vehicle finder",
+    page_title="Vehicle finder",
     page_icon="🚘",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="auto",
 )
 
@@ -14,54 +15,43 @@ st.title('🚘 Vehicle finder')
 
 st.markdown("""Find a vehicle from it's caracteristics""")
 
-# Load data
-
-df = pd.read_csv('data/fuel_consumption.csv', parse_dates=['YEAR'])
-# Change Type of fuel to name
-df['FUEL'] = df['FUEL'].replace({'X': 'Regular gasoline', 'Z': 'Premium gasoline', 'D': 'Diesel', 'E': 'Ethanol (E85)', 'N': 'Natural Gas'})
-# Extract last caracter of transmission as number of gears
-# ie. 816 cars have continuous variable transmission and don't have a number of gears
-df['GEARS'] = df['TRANSMISSION'].str.extract(r'(\d+)$', expand=False)
-df['TRANSMISSION'] = df['TRANSMISSION'].str.replace(r'\d+$', '')
-df['TRANSMISSION'] = df['TRANSMISSION'].replace({'A': 'Automatic', 'AM': 'Automated manual', 'AS': 'Automatic with select shift', 'AV': 'Continuously variable', 'M': 'Manual'})
-# Rename FUEL CONSUMPTION to CITY (L/100 km)
-df = df.drop(columns=['COMB (mpg)'], axis = 1)
-df = df.rename(columns={'FUEL CONSUMPTION': 'CITY (L/100 km)'})
-df['MAKE'] = df['MAKE'].str.upper()
-# 512 models are written in different lower/upper case
-df['MODEL'] = df['MODEL'].str.upper()
-
-# Uniformize vehicle class
-df['VEHICLE CLASS'] = df['VEHICLE CLASS'].str.capitalize()
-df.loc[df['VEHICLE CLASS'].str.contains('Pickup truck'), 'VEHICLE CLASS'] = 'Pickup truck'
-df.loc[df['VEHICLE CLASS'].str.contains('Station wagon'), 'VEHICLE CLASS'] = 'Station wagon'
-df.loc[df['VEHICLE CLASS'].str.contains('Suv'), 'VEHICLE CLASS'] = 'SUV'
-df.loc[df['VEHICLE CLASS'].str.contains('Van'), 'VEHICLE CLASS'] = 'Van'
-
-# rename YEAR, VEHICLE CLASS, MAKE, MODEL, ENGINE SIZE, CYLINDERS, TRANSMISSION, FUEL, CITY (L/100 km), HWY (L/100 km), COMB (L/100 km), CO2 EMISSIONS (g/km)
-df = df.rename(columns={'YEAR': 'Release year', 'GEARS' : 'Gears', 'VEHICLE CLASS': 'Vehicle class', 'MAKE': 'Make', 'MODEL': 'Model', 'ENGINE SIZE': 'Engine size (L)', 'CYLINDERS': 'Cylinders', 'TRANSMISSION': 'Transmission', 'FUEL': 'Fuel', 'CITY (L/100 km)': 'City (L/100 km)', 'COMB (L/100 km)': 'Mixed consumption (L/100 km)', 'HWY (L/100 km)': 'Highway (L/100 km)', 'EMISSIONS': 'CO2 emissions (g/km)'})
-df['Release year'] = df['Release year'].dt.year
-# reorder column
-df = df[['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears', 'Engine size (L)', 'Cylinders', 'CO2 emissions (g/km)', 'Mixed consumption (L/100 km)', 'City (L/100 km)', 'Highway (L/100 km)']]
-filter = df.copy()
+# Load and preprocess data
+df = load_data('data/fuel_consumption.csv')
+df = df.rename(columns=display_columns_name_mapping)
 
 col1, col2 = st.columns(2)
+
+# Filter by make
 with col1:
-    make = selectbox('Make', df['Make'].unique())
-if make:
-    filter = filter[df['Make'] == make] 
+    selected_make = st.selectbox('Make', sorted(df['Make'].unique()), index=None, placeholder="Select a make")
 
+if selected_make:
+    df = df[df['Make'] == selected_make]
+
+# Filter by model
 with col2:
-    options = filter['Model'].unique()
-    options.sort()
-    model = selectbox('Model', options)
-if model:
-    filter = filter[filter['Model'] == model]
+    selected_model = st.selectbox('Model', sorted(df['Model'].unique()), index=None, placeholder="Select a model")
 
-col_manually_filter = filter[['Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears', 'Engine size (L)', 'Cylinders', 'CO2 emissions (g/km)', 'Mixed consumption (L/100 km)', 'City (L/100 km)', 'Highway (L/100 km)']]
-index_col_manually_filter = dataframe_explorer(col_manually_filter).index
+if selected_model:
+    df = df[df['Model'] == selected_model]
 
-filter = filter[filter.index.isin(index_col_manually_filter)]
-filter = filter.sort_values(by = ['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel', 'Transmission', 'Gears'])
-filter = filter.reset_index(drop=True)
-st.dataframe(filter, use_container_width=True, hide_index=True)
+# Manual filter
+
+col_for_manual_filter = ['Release year', 'Vehicle class', 'Fuel Type', 'Transmission', 'Gears', 'Engine size (L)', 'Cylinders', 'CO2 emissions (g/km)', 'Mixed (L/100 km)']
+# Filter column that only have one unique value
+for col in col_for_manual_filter:
+    if df[col].nunique() == 1:
+        col_for_manual_filter.remove(col)
+# Remove manual filter if there is only one row
+if df.shape[0] == 1:
+    col_for_manual_filter = []
+
+filtered_indices = dataframe_explorer(df[col_for_manual_filter]).index
+df = df[df.index.isin(filtered_indices)]
+
+# Sort and display
+df = df.sort_values(by=['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel Type', 'Transmission', 'Gears'])
+
+col_display_order = ['Release year', 'Make', 'Model', 'Vehicle class', 'Engine size (L)', 'Cylinders', 'Transmission', 'Gears', 'Fuel Type', 'City (L/100 km)', 'Highway (L/100 km)', 'Mixed (L/100 km)', 'CO2 emissions (g/km)']
+
+st.dataframe(df, use_container_width=True, hide_index=True, column_order=col_display_order)

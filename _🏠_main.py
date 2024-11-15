@@ -12,7 +12,7 @@ st.title('⛽︎ Fuel consumption')
 
 mention(
     label="Mathis Derenne",
-    icon="github",  # GitHub is also featured!
+    icon="github",
     url="https://github.com/mathisdrn",
 )
 
@@ -23,8 +23,7 @@ This project aims at providing a deeper understanding of how caractheristic of a
 ### Components :
 - **dashboard** : display main metrics and charts
 - **vehicle finder** : find a car based on its characteristics
-- **prediction model** : train a model to predict the fuel consumption of a car based on existing pool of cars
-- **your car consumption** : predict the fuel consumption of a car based on its characteristics
+- **your car consumption** : estimate your car's emissions and fuel consumption based on its characteristics
 
 ### About the data :
 
