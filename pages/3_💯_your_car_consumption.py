@@ -48,8 +48,8 @@ if submitted:
     model = load_model()
     
     # Predict
-    result = model.predict(df).reshape(-1,)
-    
+    result = model.predict(car_features_df).reshape(-1,)
+
     st.header('🛢️ &nbsp; Your results !')
     st.markdown(f"#### 💨 &nbsp; Emissions : {result[0]:.0f} g/km")
     st.markdown(f"#### 🔃 &nbsp; Mixed consumption : {result[1]:.1f} L/100 km")
