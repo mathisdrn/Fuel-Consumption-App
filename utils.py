@@ -13,7 +13,7 @@ class CarModelData(pa.DataFrameModel):
     engine_size: float = pa.Field(coerce=True)
     cylinders: pd.CategoricalDtype = pa.Field(coerce=True)
     transmission_type: pd.CategoricalDtype = pa.Field(coerce=True)
-    gears: pd.CategoricalDtype = pa.Field(coerce=True, nullable=True)
+    gears: int = pa.Field(coerce=True, nullable=True)
     fuel_type: pd.CategoricalDtype = pa.Field(coerce=True)
     fc_city: float = pa.Field(coerce=True)
     fc_highway: float = pa.Field(coerce=True)
