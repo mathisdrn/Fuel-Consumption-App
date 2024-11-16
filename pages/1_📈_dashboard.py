@@ -1,7 +1,5 @@
 import streamlit as st
 import altair as alt
-import csv
-import numpy as np
 import pandas as pd
 from utils import load_data, percentage_change
 

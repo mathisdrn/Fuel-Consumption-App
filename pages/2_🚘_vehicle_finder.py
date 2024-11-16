@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from streamlit_extras.no_default_selectbox import selectbox
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 from utils import load_data, display_columns_name_mapping
 
@@ -13,7 +12,7 @@ st.set_page_config(
 
 st.title('🚘 Vehicle finder')
 
-st.markdown("""Find a vehicle from it's caracteristics""")
+st.markdown("Find a vehicle from it's caracteristics")
 
 # Load and preprocess data
 df = load_data('data/fuel_consumption.csv')
@@ -50,7 +49,7 @@ filtered_indices = dataframe_explorer(df[col_for_manual_filter]).index
 df = df[df.index.isin(filtered_indices)]
 
 # Sort and display
-df = df.sort_values(by=['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel Type', 'Transmission', 'Gears'])
+df = df.sort_values(by=['Make', 'Model', 'Release year', 'Vehicle class', 'Fuel Type', 'Transmission', 'Gears'], ascending=False)
 
 col_display_order = ['Release year', 'Make', 'Model', 'Vehicle class', 'Engine size (L)', 'Cylinders', 'Transmission', 'Gears', 'Fuel Type', 'City (L/100 km)', 'Highway (L/100 km)', 'Mixed (L/100 km)', 'CO2 emissions (g/km)']
 
