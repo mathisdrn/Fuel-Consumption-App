@@ -1,7 +1,7 @@
 import streamlit as st
 import altair as alt
 import pandas as pd
-from utils import load_data, percentage_change
+from utils import get_car_data, percentage_change
 
 st.set_page_config(
     page_title="Fuel consumption - Dashboard",
@@ -11,7 +11,7 @@ st.set_page_config(
 
 st.title("📈 Dashboard")
 
-df = load_data('data/fuel_consumption.csv')
+df = get_car_data() 
 
 # -------------- Metric --------------
 
@@ -37,7 +37,7 @@ col3.metric("Vehicle emissions", f"{m_2022['emissions']:.0f} g/km", f"{percentag
 # ------------- Plotting -------------
 
 # Number of models released over time
-temp = df.groupby('release_year').agg(model_count=('make', 'count')).reset_index()
+temp = df.groupby('release_year').size().reset_index(name='model_count')
 
 chart = alt.Chart(temp).mark_line().encode(
     x=alt.X('release_year:O', title='Year', axis=alt.Axis(labelAngle=0, values=temp['release_year'].unique()[::2])),
@@ -47,8 +47,8 @@ chart = alt.Chart(temp).mark_line().encode(
 st.altair_chart(chart, use_container_width=True)
 
 # Vehicle class proportion over time
-temp = df.groupby(['release_year', 'vehicle_class']).size().reset_index(name='count')
-temp['proportion'] = temp['count'] / temp.groupby('release_year')['count'].transform('sum') 
+temp = df.groupby(['release_year', 'vehicle_class']).size().reset_index(name='model_count')
+temp['proportion'] = temp['model_count'] / temp.groupby('release_year')['model_count'].transform('sum') 
 
 chart = alt.Chart(temp).mark_area().encode(
     x=alt.X('release_year:O', title='Year', axis=alt.Axis(labelAngle=0, values=temp['release_year'].unique()[::2])),
@@ -62,8 +62,8 @@ chart = alt.Chart(temp).mark_area().encode(
 st.altair_chart(chart, use_container_width=True)
 
 # Vehicle fuel type proportion over time
-temp = df.groupby(['release_year', 'fuel_type']).size().reset_index(name='count')
-temp['proportion'] = temp['count'] / temp.groupby('release_year')['count'].transform('sum')
+temp = df.groupby(['release_year', 'fuel_type']).size().reset_index(name='model_count')
+temp['proportion'] = temp['model_count'] / temp.groupby('release_year')['model_count'].transform('sum')
 
 chart_fuel = alt.Chart(temp).mark_bar().encode(
     x=alt.X('release_year:O', title='Year', axis=alt.Axis(labelAngle=0, values=temp['release_year'].unique()[::2])),
@@ -77,8 +77,8 @@ chart_fuel = alt.Chart(temp).mark_bar().encode(
 st.altair_chart(chart_fuel, use_container_width=True)
 
 # Fuel type proportion versus vehicle type
-temp = df.groupby(['vehicle_class', 'fuel_type']).size().reset_index(name='count')
-temp['proportion'] = temp['count'] / temp.groupby('vehicle_class')['count'].transform('sum')
+temp = df.groupby(['vehicle_class', 'fuel_type']).size().reset_index(name='model_count')
+temp['proportion'] = temp['model_count'] / temp.groupby('vehicle_class')['model_count'].transform('sum')
 
 order = df.groupby(['vehicle_class'])['make'].count().sort_values(ascending=False).index.to_list()
 

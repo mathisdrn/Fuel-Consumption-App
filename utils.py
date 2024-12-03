@@ -37,7 +37,7 @@ display_columns_name_mapping = {
 }
 
 @st.cache_data
-def load_data(filepath) -> DataFrame[CarModelData]:
+def load_car_data(filepath) -> DataFrame[CarModelData]:
     df = pd.read_csv(filepath)
     columns_name = {
         'YEAR': 'release_year', 
@@ -93,6 +93,12 @@ def load_data(filepath) -> DataFrame[CarModelData]:
     df = df[CarModelData.__annotations__.keys()]
     
     return df
+
+# Allows caching between pages
+def get_car_data() -> DataFrame[CarModelData]:
+    if 'car_data' not in st.session_state:
+        st.session_state.car_data = load_car_data('data/fuel_consumption.csv')
+    return st.session_state.car_data
 
 def percentage_change(new_value, old_value):
     try:

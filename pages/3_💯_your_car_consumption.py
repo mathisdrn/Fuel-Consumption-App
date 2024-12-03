@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from utils import load_data, load_model
+from utils import get_car_data, load_model
 
 st.set_page_config(
     page_title="Your vehicle consumption",
@@ -13,7 +13,7 @@ st.set_page_config(
 st.title("💯 Estimate your vehicle consumption")
 st.write("Give us some informations about your vehicle and we will estimate its fuel consumption and CO2 emissions.")
 
-df = load_data('data/fuel_consumption.csv')
+df = get_car_data()
 
 col1, col2 = st.columns(2)
 with col1:

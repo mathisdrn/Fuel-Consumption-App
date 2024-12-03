@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from streamlit_extras.dataframe_explorer import dataframe_explorer
-from utils import load_data, display_columns_name_mapping
+from utils import get_car_data, display_columns_name_mapping
 
 st.set_page_config(
     page_title="Vehicle finder",
@@ -15,7 +15,7 @@ st.title('🚘 Vehicle finder')
 st.markdown("Find a vehicle from it's caracteristics")
 
 # Load and preprocess data
-df = load_data('data/fuel_consumption.csv')
+df = get_car_data()
 df = df.rename(columns=display_columns_name_mapping)
 
 col1, col2 = st.columns(2)
