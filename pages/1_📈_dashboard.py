@@ -16,7 +16,7 @@ df = get_car_data()
 # -------------- Metric --------------
 
 # Group by year and calculate the required metrics
-metrics_df = df.groupby(df['release_year']).agg(
+metrics_df = df.groupby('release_year').agg(
     model_count=('make', 'count'),
     mixed_consumption=('fc_mixed', 'mean'),
     emissions=('emissions', 'mean')
@@ -42,7 +42,9 @@ temp = df.groupby('release_year').size().reset_index(name='model_count')
 chart = alt.Chart(temp).mark_line().encode(
     x=alt.X('release_year:O', title='Year', axis=alt.Axis(labelAngle=0, values=temp['release_year'].unique()[::2])),
     y=alt.Y('model_count:Q', title='Number of models'),
-    tooltip=['release_year', 'model_count']
+    tooltip=[
+        alt.Tooltip('release_year:O', title='Year'),
+        alt.Tooltip('model_count:Q', title='Number of models')]
 ).properties(title='Number of models released over time')
 st.altair_chart(chart, use_container_width=True)
 

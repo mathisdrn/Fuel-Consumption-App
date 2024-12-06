@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit_extras.mention import mention 
 
 st.set_page_config(
-    page_title="⛽︎ Fuel consumption",
+    page_title="Fuel consumption",
     page_icon="🏠",
     layout="centered",
     initial_sidebar_state="auto",

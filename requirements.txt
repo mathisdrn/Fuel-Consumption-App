@@ -1,8 +1,8 @@
-streamlit >= 1.40.1, < 1.41.0
-altair >= 5.4.1, < 5.5.0
-pandas >= 2.2.3, < 2.3.0
-numpy >= 1.26.4, < 1.27.0
-scikit-learn >= 1.5.2, < 1.6.0
-pandera >= 0.20.4, < 0.21.0
-ipykernel >= 6.29.5, < 6.30.0
-streamlit_extras >= 0.5.0, < 0.6.0
+streamlit ~= 1.40.1
+altair ~= 5.4.1
+pandas ~= 2.2.3
+numpy ~= 1.26.4
+scikit-learn ~= 1.5.2
+pandera ~= 0.20.4
+ipykernel ~= 6.29.5
+streamlit_extras ~= 0.5.0
