@@ -5,7 +5,7 @@ st.set_page_config(
     page_title="Fuel consumption",
     page_icon="🏠",
     layout="centered",
-    initial_sidebar_state="auto",
+    initial_sidebar_state="expanded",
 )
 
 st.title('⛽︎ Fuel consumption')

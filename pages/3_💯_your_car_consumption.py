@@ -1,5 +1,5 @@
 import streamlit as st
-import pandas as pd
+import polars as pl
 import numpy as np
 from utils import get_car_data, load_model
 
@@ -15,19 +15,16 @@ st.write("Give us some informations about your vehicle and we will estimate its 
 
 df = get_car_data()
 
-# Convert to Pandas DataFrame
-df = df.to_pandas()
-
 col1, col2 = st.columns(2)
 with col1:
-    make = st.selectbox('Make', sorted(df['make'].unique()))
+    make = st.selectbox('Make', df['make'].unique().sort())
     release_year = st.text_input('Release year', value=2010)
-    transmission_type = st.selectbox('Transmission type', sorted(df['transmission_type'].unique()))
+    transmission_type = st.selectbox('Transmission type', df['transmission_type'].unique().sort())
     engine_size = st.slider('Engine size (L)', df['engine_size'].min(), df['engine_size'].max(), step=0.1, value=2.0, format='%.1f L')
 with col2:
-    vehicle_class = st.selectbox('Vehicle class', sorted(df['vehicle_class'].unique()))
-    fuel = st.selectbox('Fuel type', sorted(df['fuel_type'].unique()))
-    gears = st.slider('Gears', df['gears'].min(), df['gears'].max(), step=1.0, value=5.0, format='%.0f')
+    vehicle_class = st.selectbox('Vehicle class', df['vehicle_class'].unique().sort())
+    fuel = st.selectbox('Fuel type', df['fuel_type'].unique().sort())
+    gears = st.slider('Gears', df['gears'].min(), df['gears'].max(), step=1, value=5, format='%.0f')
     cylinders = st.slider('Cylinders', df['cylinders'].min(), df['cylinders'].max(), step=1, value=4)
 
 car_features = {
@@ -40,7 +37,8 @@ car_features = {
     'engine_size': [float(engine_size)],
     'cylinders': [int(cylinders)]
 }
-car_features_df = pd.DataFrame(car_features)
+
+car_features_df = pl.DataFrame(car_features)
 
 # Load model
 model = load_model()

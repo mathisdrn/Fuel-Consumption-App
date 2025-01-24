@@ -24,14 +24,14 @@ col1, col2 = st.columns(2)
 
 # Filter by make
 with col1:
-    selected_make = st.selectbox('Make', df['Make'].unique().sort().to_list(), index=None, placeholder="Select a make")
+    selected_make = st.selectbox('Make', df['Make'].unique().sort(), index=None, placeholder="Select a make")
 
 if selected_make:
     df = df.filter(pl.col('Make') == selected_make)
 
 # Filter by model
 with col2:
-    selected_model = st.selectbox('Model', df['Model'].unique().sort().to_list(), index=None, placeholder="Select a model")
+    selected_model = st.selectbox('Model', df['Model'].unique().sort(), index=None, placeholder="Select a model")
 
 if selected_model:
     df = df.filter(pl.col('Model') == selected_model)
