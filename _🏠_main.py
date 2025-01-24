@@ -16,21 +16,23 @@ mention(
     url="https://github.com/mathisdrn",
 )
 
-st.header('Project description')
 st.markdown("""
-This project aims at providing a deeper understanding of how caractheristic of a car impact fuel consumption.
+### Project description            
+            
+The **FuelConsumptionApp** provides you with tools and visual to help you understand trends in vehicle release.
+It is based on [data](https://www.kaggle.com/datasets/ahmettyilmazz/fuel-consumption) about vehicle's characteristic, consumptions and emissions of vehicle released in Canada 🇨🇦 between 2000 to 2022.
+Fuel consumption ratings have been adjusted to reflect the improved testing that is more representative of everyday driving. 
 
-### Components :
-- **dashboard** : display main metrics and charts
-- **vehicle finder** : find a car based on its characteristics
-- **your car consumption** : estimate your car's emissions and fuel consumption based on its characteristics
+##### Pages
 
-### About the data :
+- 📈 ‎ **dashboard** : display main metrics and charts
+- 🚘 ‎ **vehicle finder** : find a car based on its characteristics
+- 💯 ‎ **your car consumption** : estimate your car's emissions and fuel consumption based on its characteristics
 
-**Source** : https://www.kaggle.com/datasets/ahmettyilmazz/fuel-consumption
+##### Technologies
 
-**Description** :
-> Datasets provide model-specific fuel consumption ratings and estimated carbon dioxide emissions for new light-duty vehicles for retail sale in Canada 🇨🇦.
->
-> To help you compare vehicles from different model years, the fuel consumption ratings for 2000 to 2022 vehicles have been adjusted to reflect the improved testing that is more representative of everyday driving. Note that these are approximate values that were generated from the original ratings, not from vehicle testing.
+- **Python** (backend)
+- **Streamlit** (frontend)
+- **Polars** (data manipulation)
+- **Altair** (data visualization)
 """)
