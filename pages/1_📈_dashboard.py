@@ -1,7 +1,6 @@
 import streamlit as st
-import altair as alt
-import pandas as pd
 import polars as pl
+import altair as alt
 from utils import get_car_data, percentage_change
 
 st.set_page_config(
