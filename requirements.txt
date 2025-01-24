@@ -1,8 +1,0 @@
-streamlit ~= 1.40.1
-altair ~= 5.4.1
-pandas ~= 2.2.3
-numpy ~= 1.26.4
-scikit-learn ~= 1.5.2
-pandera ~= 0.20.4
-ipykernel ~= 6.29.5
-streamlit_extras ~= 0.5.0
