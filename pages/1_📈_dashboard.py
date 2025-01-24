@@ -13,6 +13,9 @@ st.title("📈 Dashboard")
 
 df = get_car_data() 
 
+# Convert to Pandas DataFrame
+df = df.to_pandas()
+
 # -------------- Metric --------------
 
 # Group by year and calculate the required metrics

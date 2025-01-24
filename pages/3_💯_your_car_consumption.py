@@ -15,6 +15,9 @@ st.write("Give us some informations about your vehicle and we will estimate its 
 
 df = get_car_data()
 
+# Convert to Pandas DataFrame
+df = df.to_pandas()
+
 col1, col2 = st.columns(2)
 with col1:
     make = st.selectbox('Make', sorted(df['make'].unique()))

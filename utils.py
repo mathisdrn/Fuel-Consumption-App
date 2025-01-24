@@ -120,9 +120,6 @@ def load_car_data(filepath) -> DataFrame[CarModelData]:
     )
     .select(list(CarModelData.__annotations__.keys()))
   )
-  
-  # Convert to Pandas DataFrame
-  df = df.to_pandas()
 
   return df
 

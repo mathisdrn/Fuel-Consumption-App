@@ -16,6 +16,10 @@ st.markdown("Find a vehicle from it's caracteristics")
 
 # Load and preprocess data
 df = get_car_data()
+
+# Convert to Pandas DataFrame
+df = df.to_pandas()
+
 df = df.rename(columns=display_columns_name_mapping)
 
 col1, col2 = st.columns(2)
