@@ -6,6 +6,7 @@ import streamlit as st
 import joblib
 
 MODEL_PATH = Path("data/lasso_regression.pkl")
+DATA_PATH = Path("data/fuel_consumption.csv")
 
 class CarModelData(pa.DataFrameModel):
   release_year: int = pa.Field(coerce=True, gt=1999, lt=2050)
@@ -127,7 +128,7 @@ def load_car_data(filepath) -> DataFrame[CarModelData]:
 # Allows caching between pages
 def get_car_data() -> DataFrame[CarModelData]:
   if "car_data" not in st.session_state:
-    st.session_state.car_data = load_car_data("data/fuel_consumption.csv")
+    st.session_state.car_data = load_car_data(DATA_PATH)
   return st.session_state.car_data
 
 
