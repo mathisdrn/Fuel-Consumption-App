@@ -3,8 +3,9 @@ import polars as pl
 import pandera as pa
 from pandera.typing import DataFrame
 import streamlit as st
-import pickle
+import joblib
 
+MODEL_PATH = Path("data/lasso_regression.pkl")
 
 class CarModelData(pa.DataFrameModel):
   release_year: int = pa.Field(coerce=True, gt=1999, lt=2050)
@@ -142,5 +143,5 @@ def percentage_change(new_value, old_value):
 
 @st.cache_data
 def load_model():
-  model = pickle.load(open("data/lasso_regression.pkl", "rb"))
+  model = joblib.load(MODEL_PATH)
   return model
