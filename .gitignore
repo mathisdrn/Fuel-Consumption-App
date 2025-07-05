@@ -155,3 +155,5 @@ cython_debug/
 !pages/*.ipynb
 prediction_model 2.ipynb
 predictor.ipynb
+
+_build/

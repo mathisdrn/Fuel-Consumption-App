@@ -1,14 +1,14 @@
 import streamlit as st
-from streamlit_extras.mention import mention 
+from streamlit_extras.mention import mention
 
 st.set_page_config(
-    page_title="Fuel consumption",
+    page_title="FuelConsumption",
     page_icon="🏠",
     layout="centered",
     initial_sidebar_state="expanded",
 )
 
-st.title('⛽︎ Fuel consumption')
+st.title("⛽︎ FuelConsumption")
 
 mention(
     label="Mathis Derenne",
@@ -16,14 +16,14 @@ mention(
     url="https://github.com/mathisdrn",
 )
 
-st.markdown("""
-### Project description            
-            
-The **FuelConsumptionApp** provides you with tools and visual to help you understand trends in vehicle release.
-It is based on [data](https://www.kaggle.com/datasets/ahmettyilmazz/fuel-consumption) about vehicle's characteristic, consumptions and emissions of vehicle released in Canada 🇨🇦 between 2000 to 2022.
-Fuel consumption ratings have been adjusted to reflect the improved testing that is more representative of everyday driving. 
+"""
+---
+**FuelConsumption** is a comprehensive toolset designed to analyze and visualize trends in car releases.
 
-##### Pages
+It focuses on the relation between **fuel type** and **vehicle class** with regard to **fuel efficiency** and **emissions**. 
+It is based on [data](https://www.kaggle.com/datasets/ahmettyilmazz/fuel-consumption) that covers vehicles released in Canada 🇨🇦 from 2000 to 2022.
+
+##### Features
 
 - 📈 ‎ **dashboard** : display main metrics and charts
 - 🚘 ‎ **vehicle finder** : find a car based on its characteristics
@@ -35,4 +35,4 @@ Fuel consumption ratings have been adjusted to reflect the improved testing that
 - **Streamlit** (frontend)
 - **Polars** (data manipulation)
 - **Altair** (data visualization)
-""")
+"""
