@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "altair==5.*",
+    "dataframely>=1.7.5",
     "ipykernel==6.*",
     "joblib==1.*",
     "numpy==2.*",

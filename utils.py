@@ -1,30 +1,43 @@
 from pathlib import Path
-import polars as pl
-import pandera.polars as pa
-from pandera.typing import DataFrame
-import streamlit as st
+
+import dataframely as dy
 import joblib
+import polars as pl
+import streamlit as st
+from streamlit.runtime import exists as st_runtime_exists
+
+
+# Define a dummy decorator to replace st.cache_data when not in a Streamlit context
+def _noop_decorator(func):
+    return func
+
+
+# If not running in a Streamlit context, replace st.cache_data with the dummy decorator
+if not st_runtime_exists():
+    st.cache_data = _noop_decorator
+
 
 MODEL_PATH = Path("data/lasso_regression.pkl")
 DATA_PATH = Path("data/fuel_consumption.csv")
 
 
-class CarModelData(pa.DataFrameModel):
-    release_year: int = pa.Field(coerce=True, gt=1999, lt=2050)
-    vehicle_class: pl.Categorical = pa.Field(coerce=True)
-    make: str = pa.Field(coerce=True)
-    model: str = pa.Field(coerce=True)
-    engine_size: float = pa.Field(coerce=True)
-    cylinders: pl.Categorical = pa.Field(coerce=True)
-    transmission_type: pl.Categorical = pa.Field(coerce=True)
-    gears: int = pa.Field(coerce=True, nullable=True)
-    fuel_type: pl.Categorical = pa.Field(coerce=True)
-    fc_city: float = pa.Field(coerce=True)
-    fc_highway: float = pa.Field(coerce=True)
-    fc_mixed: float = pa.Field(coerce=True)
-    emissions: int = pa.Field(coerce=True)
+class CarDataSchema(dy.Schema):
+    release_year = dy.Integer(nullable=False)
+    vehicle_class = dy.String(nullable=False)
+    make = dy.String(nullable=False)
+    model = dy.String(nullable=False)
+    engine_size = dy.Float(nullable=False)
+    cylinders = dy.Integer(nullable=False)
+    transmission_type = dy.String(nullable=False)
+    gears = dy.Integer(nullable=True)
+    fuel_type = dy.String(nullable=False)
+    fc_city = dy.Float(nullable=False)
+    fc_highway = dy.Float(nullable=False)
+    fc_mixed = dy.Float(nullable=False)
+    emissions = dy.Integer(nullable=False)
 
 
+# Create a mapping for display names of columns
 display_columns_name_mapping = {
     "release_year": "Release year",
     "vehicle_class": "Vehicle class",
@@ -43,7 +56,7 @@ display_columns_name_mapping = {
 
 
 @st.cache_data
-def load_car_data(filepath) -> DataFrame[CarModelData]:
+def load_car_data(filepath=DATA_PATH) -> pl.DataFrame:
     columns_name = {
         "YEAR": "release_year",
         "VEHICLE CLASS": "vehicle_class",
@@ -51,13 +64,17 @@ def load_car_data(filepath) -> DataFrame[CarModelData]:
         "MODEL": "model",
         "ENGINE SIZE": "engine_size",
         "CYLINDERS": "cylinders",
-        "TRANSMISSION": "transmission_type",
+        "TRANSMISSION": "transmission_info",
         "FUEL": "fuel_type",
         "FUEL CONSUMPTION": "fc_city",
         "HWY (L/100 km)": "fc_highway",
         "COMB (L/100 km)": "fc_mixed",
         "EMISSIONS": "emissions",
     }
+
+    df: pl.LazyFrame = (
+        pl.scan_csv(filepath).select(list(columns_name.keys())).rename(columns_name)
+    )
 
     fuel_mapping = {
         "X": "Regular gasoline",
@@ -67,13 +84,7 @@ def load_car_data(filepath) -> DataFrame[CarModelData]:
         "N": "Natural Gas",
     }
 
-    transmission_mapping = {
-        "A": "Automatic",
-        "AM": "Automated manual",
-        "AS": "Automatic with select shift",
-        "AV": "Continuously variable",
-        "M": "Manual",
-    }
+    df = df.with_columns(pl.col("fuel_type").replace(fuel_mapping))
 
     vehicle_class_category = {
         "Minivan": ["MINIVAN", "Minivan"],
@@ -102,51 +113,50 @@ def load_car_data(filepath) -> DataFrame[CarModelData]:
         ],
     }
 
-    # Flatten the vehicle class mapping
+    # Flatten and inverse the vehicle class mapping
     vehicle_class_mapping = {
         v: k for k, values in vehicle_class_category.items() for v in values
     }
 
-    df = (
-        pl.read_csv(filepath)
-        .select(columns_name.keys())
-        .rename(columns_name)
-        .with_columns(
-            [
-                pl.col("fuel_type").replace(fuel_mapping),
-                pl.col("vehicle_class").replace(vehicle_class_mapping),
-                pl.col("transmission_type")
-                .str.extract(r"(\d+)$")
-                .cast(pl.Int32)
-                .alias("gears"),
-                pl.col("transmission_type")
-                .str.replace(r"\d+", "")
-                .replace(transmission_mapping),
-                pl.col("make").str.to_titlecase(),
-                pl.col("model").str.to_titlecase(),
-            ]
-        )
-        .select(list(CarModelData.__annotations__.keys()))
+    df = df.with_columns(pl.col("vehicle_class").replace(vehicle_class_mapping))
+
+    transmission_mapping = {
+        "A": "Automatic",
+        "AM": "Automated manual",
+        "AS": "Automatic with select shift",
+        "AV": "Continuously variable",
+        "M": "Manual",
+    }
+
+    df = df.with_columns(
+        pl.col("transmission_info")
+        .str.extract(r"([A-Z]+)")
+        .replace(transmission_mapping)
+        .alias("transmission_type"),
+        pl.col("transmission_info").str.extract(r"(\d+)").cast(pl.Int32).alias("gears"),
     )
+
+    # Ensure the DataFrame matches the CarDataSchema
+    df = CarDataSchema.validate(df, cast=True)
 
     return df
 
 
-# Allows caching between pages
-def get_car_data() -> DataFrame[CarModelData]:
-    if "car_data" not in st.session_state:
-        st.session_state.car_data = load_car_data(DATA_PATH)
-    return st.session_state.car_data
-
-
-def percentage_change(new_value, old_value):
-    try:
-        return (new_value - old_value) / old_value
-    except ZeroDivisionError:
-        return "N/A"
+def percentage_change(new_value: float, old_value: float) -> float:
+    if old_value == 0:
+        return float("N/A")
+    return (new_value - old_value) / old_value
 
 
 @st.cache_data
-def load_model():
-    model = joblib.load(MODEL_PATH)
+def load_model(filepath=MODEL_PATH):
+    model = joblib.load(filepath)
     return model
+
+
+if __name__ == "__main__":
+    car_data = load_car_data(DATA_PATH)
+    car_data.glimpse()
+
+    model = load_model()
+    print(model)

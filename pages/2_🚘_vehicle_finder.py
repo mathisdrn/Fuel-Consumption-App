@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import polars as pl
 from streamlit_extras.dataframe_explorer import dataframe_explorer
-from utils import get_car_data, display_columns_name_mapping
+from utils import load_car_data, display_columns_name_mapping
 
 st.set_page_config(
     page_title="Vehicle finder",
@@ -16,7 +16,7 @@ st.title("🚘 Vehicle finder")
 st.markdown("Find a vehicle from it's caracteristics")
 
 # Load and preprocess data
-df = get_car_data()
+df = load_car_data()
 
 df = df.rename(display_columns_name_mapping)
 

@@ -1,7 +1,7 @@
 import streamlit as st
 import polars as pl
 import numpy as np
-from utils import get_car_data, load_model
+from utils import load_car_data, load_model
 
 st.set_page_config(
     page_title="Your vehicle consumption",
@@ -15,7 +15,7 @@ st.write(
     "Give us some informations about your vehicle and we will estimate its fuel consumption and CO2 emissions."
 )
 
-df = get_car_data()
+df = load_car_data()
 
 col1, col2 = st.columns(2)
 with col1:

@@ -18,7 +18,7 @@ mention(
 
 """
 ---
-**FuelConsumption** is a comprehensive toolset designed to analyze and visualize trends in car releases.
+**FuelConsumption** is a website where you can explore and visualise trends in car releases over time.
 
 It focuses on the relation between **fuel type** and **vehicle class** with regard to **fuel efficiency** and **emissions**. 
 It is based on [data](https://www.kaggle.com/datasets/ahmettyilmazz/fuel-consumption) that covers vehicles released in Canada 🇨🇦 from 2000 to 2022.
