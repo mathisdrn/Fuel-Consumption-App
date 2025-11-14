@@ -20,29 +20,26 @@ df = load_car_data()
 
 df = df.rename(display_columns_name_mapping)
 
-col1, col2 = st.columns(2)
+# Filters
 
-# Filter by make
+col1, col2 = st.columns(2)
 with col1:
     selected_make = st.selectbox(
         "Make", df["Make"].unique().sort(), index=None, placeholder="Select a make"
     )
+    if selected_make:
+        df = df.filter(pl.col("Make") == selected_make)
 
-if selected_make:
-    df = df.filter(pl.col("Make") == selected_make)
-
-# Filter by model
 with col2:
     selected_model = st.selectbox(
         "Model", df["Model"].unique().sort(), index=None, placeholder="Select a model"
     )
+    if selected_model:
+        df = df.filter(pl.col("Model") == selected_model)
 
-if selected_model:
-    df = df.filter(pl.col("Model") == selected_model)
+# Automatic filters
 
-# Manual filter
-
-col_for_manual_filter = [
+extra_cols_to_filter = [
     "Release year",
     "Vehicle class",
     "Fuel Type",
@@ -53,54 +50,35 @@ col_for_manual_filter = [
     "CO2 emissions (g/km)",
     "Mixed (L/100 km)",
 ]
-# Filter column that only have one unique value
-for col in col_for_manual_filter:
-    if df[col].n_unique() == 1:
-        col_for_manual_filter.remove(col)
-# Remove manual filter if there is only one row
-if df.shape[0] == 1:
-    col_for_manual_filter = []
 
-# Convert to Pandas DataFrame -> no support for Polars DataFrame in dataframe_explorer
+# Only propose to filter columns that have more than 1 unique value
+
+# Way 1
+col_for_manual_filter = df.select(
+    [s for s in df if (s.name in extra_cols_to_filter) and s.n_unique() > 1]
+).columns
+
+# Way 2
+col_for_manual_filter = (
+    df.select(extra_cols_to_filter)
+    .select(pl.all().n_unique())
+    .transpose(include_header=True, header_name="column", column_names=["n_unique"])
+    .filter(pl.col("n_unique") > 1)
+    .get_column("column")
+    .to_list()
+)
+
+# Way 3
+col_for_manual_filter = [col for col in extra_cols_to_filter if df[col].n_unique() > 1]
+
+# Convert to a Pandas DataFrame -> no support for Polars in dataframe_explorer
 df = df.to_pandas()
 
 filtered_indices = dataframe_explorer(df[col_for_manual_filter]).index
 df = df[df.index.isin(filtered_indices)]
 
-# Sort and display
-df = df.sort_values(
-    by=[
-        "Make",
-        "Model",
-        "Release year",
-        "Vehicle class",
-        "Fuel Type",
-        "Transmission",
-        "Gears",
-    ],
-    ascending=False,
-)
-
-col_display_order = [
-    "Release year",
-    "Make",
-    "Model",
-    "Vehicle class",
-    "Engine size (L)",
-    "Cylinders",
-    "Transmission",
-    "Gears",
-    "Fuel Type",
-    "City (L/100 km)",
-    "Highway (L/100 km)",
-    "Mixed (L/100 km)",
-    "CO2 emissions (g/km)",
-]
-
 st.dataframe(
     df,
     width="stretch",
-    height="auto",
     hide_index=True,
-    column_order=col_display_order,
 )

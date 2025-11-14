@@ -26,8 +26,8 @@ with col1:
     )
     engine_size = st.slider(
         label="Engine size (L)",
-        min_value=df["engine_size"].min(),
-        max_value=df["engine_size"].max(),
+        min_value=float(df["engine_size"].min()),
+        max_value=float(df["engine_size"].max()),
         value=2.0,
         step=0.1,
         format="%.1f L",
@@ -39,16 +39,16 @@ with col2:
     fuel = st.selectbox(label="Fuel type", options=df["fuel_type"].unique().sort())
     gears = st.slider(
         label="Gears",
-        min_value=df["gears"].min(),
-        max_value=df["gears"].max(),
+        min_value=int(df["gears"].min()),
+        max_value=int(df["gears"].max()),
         value=5,
         step=1,
         format="%.0f",
     )
     cylinders = st.slider(
         label="Cylinders",
-        min_value=df["cylinders"].min(),
-        max_value=df["cylinders"].max(),
+        min_value=int(df["cylinders"].min()),
+        max_value=int(df["cylinders"].max()),
         value=4,
         step=1,
     )

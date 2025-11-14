@@ -18,18 +18,17 @@ mention(
 
 """
 ---
-**FuelConsumption** is a website where you can explore and visualise trends in car releases over time.
+**FuelConsumption** data is based on of vehicles released in Canada 🇨🇦 between 1995 to 2024 ([source](https://open.canada.ca/data/en/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64)). 
 
-It focuses on the relation between **fuel type** and **vehicle class** with regard to **fuel efficiency** and **emissions**. 
-It is based on [data](https://www.kaggle.com/datasets/ahmettyilmazz/fuel-consumption) that covers vehicles released in Canada 🇨🇦 from 2000 to 2022.
+It contains: 
 
-##### Features
+- 📈 ‎ **a dashboard** that let you see key metrics and trends
+- 🚘 ‎ **a vehicle finder** to find cars based on their characteristics
+- 💯 ‎ **an estimator of a car consumption and emissions** based on their characteristics
 
-- 📈 ‎ **dashboard** : display main metrics and charts
-- 🚘 ‎ **vehicle finder** : find a car based on its characteristics
-- 💯 ‎ **your car consumption** : estimate your car's emissions and fuel consumption based on its characteristics
+--- 
 
-##### Technologies
+##### Technical stack
 
 - **Python** (backend)
 - **Streamlit** (frontend)

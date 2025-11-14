@@ -1,3 +1,3 @@
-# ⛽︎ Fuel-Consumption-App 
+## ⛽︎ Fuel-Consumption-App 
 
-The hosted version of this project can be [here](https://fuel-consumption-app.streamlit.app/)
+The hosted version of this project can be checked-out [here](https://fuel-consumption-app.streamlit.app/).

@@ -34,19 +34,19 @@ col1, col2, col3 = st.columns(3)
 
 col1.metric(
     label="Number of models",
-    value=f"{current_year['model_count']:.0f}",
+    value=f"{current_year['model_count']:.0f} models",
     delta=f"{percentage_change(current_year['model_count'], previous_year['model_count']):.1%}",
 )
 
 col2.metric(
-    label="Mixed consumption (L/100km)",
-    value=f"{current_year['fc_mixed']:.1f}L",
+    label="Average consumption",
+    value=f"{current_year['fc_mixed']:.1f}L/100km",
     delta=f"{current_year['fc_mixed'] - previous_year['fc_mixed']:.2f}L",
     delta_color="inverse",
 )
 
 col3.metric(
-    label="Vehicle emissions",
+    label="Average emissions",
     value=f"{current_year['emissions']:.0f}g/km",
     delta=f"{percentage_change(current_year['emissions'], previous_year['emissions']):.2%}",
     delta_color="inverse",
@@ -58,7 +58,7 @@ col3.metric(
 axis_year_values = df.get_column("release_year").unique().sort().to_list()[::2]
 
 # Model count over time
-temp = df.group_by("release_year").agg(model_count=pl.len())
+temp = df.group_by("release_year").len("model_count")
 
 chart = (
     alt.Chart(temp)
@@ -72,7 +72,7 @@ chart = (
                 values=axis_year_values,
             ),
         ),
-        y=alt.Y("model_count:Q", title="Number of models"),
+        y=alt.Y("model_count:Q", title=None),
         tooltip=[
             alt.Tooltip("release_year:O", title="Year"),
             alt.Tooltip("model_count:Q", title="Number of models"),
@@ -169,6 +169,7 @@ order = (
     .len()
     .sort("len", descending=True)
     .get_column("vehicle_class")
+    .to_list()
 )
 
 chart_fuel = (
@@ -194,7 +195,7 @@ st.markdown("### Vehicle emissions")
 
 # Vehicle emissions over time for a specific fuel type
 fuel_type = st.selectbox(
-    "Select a fuel type", df.get_column("fuel_type").unique(), index=0
+    "Select a fuel type", df.get_column("fuel_type").unique().sort(), index=0
 )
 
 temp = (
@@ -229,7 +230,7 @@ st.altair_chart(chart_emissions, width="stretch")
 
 # Vehicle emissions over time for a specific vehicle class
 vehicle_class = st.selectbox(
-    "Select a vehicle type", df.get_column("vehicle_class").unique(), index=0
+    "Select a vehicle type", df.get_column("vehicle_class").unique().sort(), index=0
 )
 
 temp = (

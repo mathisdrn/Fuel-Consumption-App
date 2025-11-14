@@ -382,24 +382,6 @@ wheels = [
 ]
 
 [[package]]
-name = "dataframely"
-version = "2.1.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "fsspec" },
-    { name = "numpy" },
-    { name = "polars" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/fb/36/dfbf5e739b9f18e07dfd23ba8a63c775f5bb0e63e03d3c4012b167581d95/dataframely-2.1.0.tar.gz", hash = "sha256:dcf67393b445e87100d8a64ea96be572ea29cacb4c836388b9ded5af3dc02514", size = 382054, upload-time = "2025-11-13T10:07:35.789Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/ce/ba96f35e80050ec8de147bb8b461cd29a08250b8c187303f3ceafa05772f/dataframely-2.1.0-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:fcdd6cc5cd9b8cb5a20043647a296b3bf6d6b496ab4d48ee1fa25850212e3501", size = 5154080, upload-time = "2025-11-13T10:07:26.929Z" },
-    { url = "https://files.pythonhosted.org/packages/f0/53/0f0fbede52751a2fcb20380cf99cc4955d673eeee7e225c974122009b668/dataframely-2.1.0-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:f4bfb98a28f0bdd680c602d512e1c2ffc8c2401d949c4f9ab67fab50cc992def", size = 4799468, upload-time = "2025-11-13T10:07:29.069Z" },
-    { url = "https://files.pythonhosted.org/packages/1f/2d/f7e4c81a93ed9575c3d89c2b357743440388b4dc1f52e5ded9360c286531/dataframely-2.1.0-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3f28d9326c2c37184c667f5e39191590a501f940d488f89a65c53c8214e7e9ac", size = 5030424, upload-time = "2025-11-13T10:07:31.014Z" },
-    { url = "https://files.pythonhosted.org/packages/3e/1d/553c8faef4018ec952129b436b9acf5140f6598e905ad4aaf2ae5af03feb/dataframely-2.1.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:30c2621468c5484010b4e55d13c4b49ca8cdab5f7bf2ee31141dce91f41572fa", size = 5331364, upload-time = "2025-11-13T10:07:32.573Z" },
-    { url = "https://files.pythonhosted.org/packages/c6/83/209760737dc526cdc141d6505e8e4f42edf743514f00368610149c6810e5/dataframely-2.1.0-cp310-abi3-win_amd64.whl", hash = "sha256:1a98e6e4801e46a550aac67dd4dcaafe77bfeb0b1148a786a59181cca2dc542e", size = 5347453, upload-time = "2025-11-13T10:07:34.098Z" },
-]
-
-[[package]]
 name = "debugpy"
 version = "1.8.17"
 source = { registry = "https://pypi.org/simple" }
@@ -511,24 +493,12 @@ wheels = [
 ]
 
 [[package]]
-name = "fsspec"
-version = "2025.10.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/24/7f/2747c0d332b9acfa75dc84447a066fdf812b5a6b8d30472b74d309bfe8cb/fsspec-2025.10.0.tar.gz", hash = "sha256:b6789427626f068f9a83ca4e8a3cc050850b6c0f71f99ddb4f542b8266a26a59", size = 309285, upload-time = "2025-10-30T14:58:44.036Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/eb/02/a6b21098b1d5d6249b7c5ab69dde30108a71e4e819d4a9778f1de1d5b70d/fsspec-2025.10.0-py3-none-any.whl", hash = "sha256:7c7712353ae7d875407f97715f0e1ffcc21e33d5b24556cb1e090ae9409ec61d", size = 200966, upload-time = "2025-10-30T14:58:42.53Z" },
-]
-
-[[package]]
 name = "fuel-consumption-app"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "altair" },
-    { name = "dataframely" },
     { name = "ipykernel" },
-    { name = "joblib" },
-    { name = "numpy" },
     { name = "pandas" },
     { name = "polars" },
     { name = "scikit-learn" },
@@ -539,10 +509,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "altair", specifier = "~=5.0" },
-    { name = "dataframely", specifier = ">=2.1.0" },
     { name = "ipykernel", specifier = ">=7.1.0" },
-    { name = "joblib", specifier = ">=1.5.2" },
-    { name = "numpy", specifier = ">=2.3.4" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "polars", specifier = ">=1.35.2" },
     { name = "scikit-learn", specifier = ">=1.7.2" },
