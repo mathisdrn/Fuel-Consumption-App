@@ -1,7 +1,7 @@
-import streamlit as st
 import polars as pl
-import numpy as np
-from utils import load_car_data, load_model
+import streamlit as st
+
+from src.utils import load_car_data, load_model
 
 st.set_page_config(
     page_title="Your vehicle consumption",
@@ -19,27 +19,38 @@ df = load_car_data()
 
 col1, col2 = st.columns(2)
 with col1:
-    make = st.selectbox("Make", df["make"].unique().sort())
-    release_year = st.text_input("Release year", value=2010)
+    make = st.selectbox(label="Make", options=df["make"].unique().sort())
+    release_year = st.selectbox(label="Release year", options=range(2025, 1979, -1))
     transmission_type = st.selectbox(
-        "Transmission type", df["transmission_type"].unique().sort()
+        label="Transmission type", options=df["transmission_type"].unique().sort()
     )
     engine_size = st.slider(
-        "Engine size (L)",
-        df["engine_size"].min(),
-        df["engine_size"].max(),
-        step=0.1,
+        label="Engine size (L)",
+        min_value=df["engine_size"].min(),
+        max_value=df["engine_size"].max(),
         value=2.0,
+        step=0.1,
         format="%.1f L",
     )
 with col2:
-    vehicle_class = st.selectbox("Vehicle class", df["vehicle_class"].unique().sort())
-    fuel = st.selectbox("Fuel type", df["fuel_type"].unique().sort())
+    vehicle_class = st.selectbox(
+        label="Vehicle class", options=df["vehicle_class"].unique().sort()
+    )
+    fuel = st.selectbox(label="Fuel type", options=df["fuel_type"].unique().sort())
     gears = st.slider(
-        "Gears", df["gears"].min(), df["gears"].max(), step=1, value=5, format="%.0f"
+        label="Gears",
+        min_value=df["gears"].min(),
+        max_value=df["gears"].max(),
+        value=5,
+        step=1,
+        format="%.0f",
     )
     cylinders = st.slider(
-        "Cylinders", df["cylinders"].min(), df["cylinders"].max(), step=1, value=4
+        label="Cylinders",
+        min_value=df["cylinders"].min(),
+        max_value=df["cylinders"].max(),
+        value=4,
+        step=1,
     )
 
 car_features = {
@@ -48,7 +59,7 @@ car_features = {
     "vehicle_class": [vehicle_class],
     "fuel_type": [fuel],
     "transmission_type": [transmission_type],
-    "gears": [gears if transmission_type != "Continuously variable" else np.nan],
+    "gears": [None if transmission_type == "Continuously variable" else gears],
     "engine_size": [float(engine_size)],
     "cylinders": [int(cylinders)],
 }

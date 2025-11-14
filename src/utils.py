@@ -56,7 +56,7 @@ display_columns_name_mapping = {
 
 
 @st.cache_data
-def load_car_data(filepath=DATA_PATH) -> pl.DataFrame:
+def load_car_data(filepath: str | Path = DATA_PATH) -> pl.DataFrame:
     columns_name = {
         "YEAR": "release_year",
         "VEHICLE CLASS": "vehicle_class",
@@ -137,7 +137,7 @@ def load_car_data(filepath=DATA_PATH) -> pl.DataFrame:
     )
 
     # Ensure the DataFrame matches the CarDataSchema
-    df = CarDataSchema.validate(df, cast=True)
+    df = CarDataSchema.validate(df, cast=True, eager=True)
 
     return df
 

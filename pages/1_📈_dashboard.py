@@ -2,7 +2,7 @@ import altair as alt
 import polars as pl
 import streamlit as st
 
-from utils import load_car_data, percentage_change
+from src.utils import load_car_data, percentage_change
 
 st.set_page_config(
     page_title="Fuel consumption - Dashboard", page_icon="📈", layout="wide"
@@ -80,7 +80,7 @@ chart = (
     )
     .properties(title="Number of models released over time")
 )
-st.altair_chart(chart, use_container_width=True)
+st.altair_chart(chart, width="stretch")
 
 # Proportion of vehicle class over time
 temp = (
@@ -118,7 +118,7 @@ chart = (
     )
     .properties(title="Vehicle Class Proportion Over Time")
 )
-st.altair_chart(chart, use_container_width=True)
+st.altair_chart(chart, width="stretch")
 
 # Proportion of vehicle fuel type over time
 temp = (
@@ -151,7 +151,7 @@ chart_fuel = (
     )
     .properties(title="Vehicle Fuel Type Proportion Over Time")
 )
-st.altair_chart(chart_fuel, use_container_width=True)
+st.altair_chart(chart_fuel, width="stretch")
 
 # Fuel type proportion versus vehicle type
 temp = (
@@ -188,7 +188,7 @@ chart_fuel = (
     )
     .properties(title="Fuel Type Proportion versus Vehicle Type")
 )
-st.altair_chart(chart_fuel, use_container_width=True)
+st.altair_chart(chart_fuel, width="stretch")
 
 st.markdown("### Vehicle emissions")
 
@@ -225,7 +225,7 @@ chart_emissions = (
     )
     .properties(title=f"Average Emissions by Vehicle Type for {fuel_type}")
 )
-st.altair_chart(chart_emissions, use_container_width=True)
+st.altair_chart(chart_emissions, width="stretch")
 
 # Vehicle emissions over time for a specific vehicle class
 vehicle_class = st.selectbox(
@@ -260,4 +260,4 @@ chart_emissions = (
     )
     .properties(title=f"Average Emissions by Fuel Type for {vehicle_class}")
 )
-st.altair_chart(chart_emissions, use_container_width=True)
+st.altair_chart(chart_emissions, width="stretch")

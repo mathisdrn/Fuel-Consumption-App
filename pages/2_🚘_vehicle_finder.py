@@ -1,8 +1,8 @@
-import streamlit as st
-import pandas as pd
 import polars as pl
+import streamlit as st
 from streamlit_extras.dataframe_explorer import dataframe_explorer
-from utils import load_car_data, display_columns_name_mapping
+
+from src.utils import display_columns_name_mapping, load_car_data
 
 st.set_page_config(
     page_title="Vehicle finder",
@@ -98,5 +98,9 @@ col_display_order = [
 ]
 
 st.dataframe(
-    df, use_container_width=True, hide_index=True, column_order=col_display_order
+    df,
+    width="stretch",
+    height="auto",
+    hide_index=True,
+    column_order=col_display_order,
 )

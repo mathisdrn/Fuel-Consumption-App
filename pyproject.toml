@@ -3,17 +3,16 @@ name = "fuel-consumption-app"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
-    "altair==5.*",
-    "dataframely>=1.7.5",
-    "ipykernel==6.*",
-    "joblib==1.*",
-    "numpy==2.*",
-    "pandas==2.*",
-    "pandera==0.*",
-    "polars==1.*",
-    "scikit-learn==1.*",
-    "streamlit==1.*",
-    "streamlit-extras==0.*",
+    "altair~=5.0",
+    "dataframely>=2.1.0",
+    "ipykernel>=7.1.0",
+    "joblib>=1.5.2",
+    "numpy>=2.3.4",
+    "pandas>=2.3.3",
+    "polars>=1.35.2",
+    "scikit-learn>=1.7.2",
+    "streamlit>=1.51.0",
+    "streamlit-extras>=0.7.8",
 ]
