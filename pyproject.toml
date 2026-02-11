@@ -5,11 +5,55 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "altair~=5.0",
+    "altair>=5.0",
     "ipykernel>=7.1.0",
     "pandas>=2.3.3",
     "polars>=1.35.2",
     "scikit-learn>=1.7.2",
     "streamlit>=1.51.0",
     "streamlit-extras>=0.7.8",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.15.0"]
+
+[tool.ruff]
+fix = true
+
+[tool.ruff.lint.pylint]
+max-args = 8
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 320
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "A004",    # built-in function shadowed
+    "ANN204",  # missing class init return type
+    "B018",    # useless-expression 
+    "B905",    # zip without explicit strict argument
+    "COM812",  # missing-trailing-comma, is already handled by ruff formatting
+    "C408",    # unnecessary-collection-call 
+    "C420",    # unnecessary-dict-comprehension
+    "D1",      # docstring-missing 
+    "D202",    # blank-line-before-function
+    "D203",    # blank-line-before-class
+    "D213",    # multi-line-summary-second-line
+    "D401",    # docstring should be in imperative mood
+    "E402",    # module level import not at top of file
+    "ERA001",  # Allow commented out code 
+    "INP001",  # implicit-namespace-package
+    "N803",    # Allow non-lowercase argument names (e.g., fit(X, y))
+    "N806",    # Allow non-lowercase variables in functions (e.g., Matrix X)
+    "N816",    # mixed-case-variable-in-global-scope
+    "PLR2004", # magic-value-comparison
+    "T201",    # print-statement
+    "S113",    # requests call without timeout
+    "RUF001",  # ambiguous-unicode-character-string
+    "RUF002",  # ambiguous-unicode-character-docstring
+    "RUF003",  # ambiguous-unicode-character-comment
+    "RET504",  # return-statement
+    "SIM108",  # ternary operator should be used 
+    "PGH003",  # blanket-type-ignore
 ]

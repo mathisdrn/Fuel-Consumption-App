@@ -1,6 +1,5 @@
+import pickle
 from pathlib import Path
-from pickle import load
-from typing import Any, TypeGuard
 
 import polars as pl
 import streamlit as st
@@ -38,21 +37,12 @@ def load_car_data(folder_path: str | Path = DATA_PATH) -> pl.DataFrame:
 @st.cache_data
 def load_model(folder_path: str | Path = DATA_PATH) -> Pipeline:
     """Load the trained scikit-learn Pipeline model from a pickle file."""
-    folder_path = Path(folder_path)
-    model_path = folder_path / "lasso_regression.pkl"
+    model_path = Path(folder_path) / "lasso_regression.pkl"
 
-    with open(model_path, "rb") as f:
-        model = load(f)
-
-    if not _is_pipeline(model):  # Runtime type safety
-        raise TypeError("Loaded object is not a sklearn Pipeline instance.")
+    with model_path.open("rb") as f:
+        model = pickle.load(f)  # noqa: S301 deserialization is safe here
 
     return model
-
-
-def _is_pipeline(obj: Any) -> TypeGuard[Pipeline]:
-    """Type guard to ensure the loaded object is a sklearn Pipeline."""
-    return isinstance(obj, Pipeline)
 
 
 def percentage_change(new_value: float, old_value: float) -> float:
